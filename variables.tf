@@ -24,20 +24,37 @@ variable "vpc_tags" {
 }
 
 variable "public_subnets" {
-   type = map
-    default = {
-        "us-east-1a" = "172.16.100.0/24"
-        "us-east-1b" = "172.16.110.0/24"
-    }
+   type = list(map(string))
+    default = [
+        {
+          name = "test-public-1"
+          az = "us-east-1c"
+          cidr = "172.16.200.0/24"
+        },
+        {
+          name = "test-public-2"
+          az = "us-east-1d"
+          cidr = "172.16.210.0/24"
+        }
+    ]
 }
 
 variable "private_subnets" {
-    type = map
-    default = {
-        "us-east-1a" = "172.16.0.0/24"
-        "us-east-1b" = "172.16.1.0/24"
-    }
+   type = list(map(string))
+    default = [
+        {
+          name = "test-priv-1"
+          az = "us-east-1a"
+          cidr = "172.16.100.0/24"
+        },
+        {
+          name = "test-priv-2"
+          az = "us-east-1b"
+          cidr = "172.16.110.0/24"
+        }
+    ]
 }
+
 variable "subnet_tags" {
     type = map(string)
     default = {}
@@ -51,16 +68,6 @@ variable "enable_dns_hostnames" {
 variable "enable_dns_support" {
     type = bool
     default = true  
-}
-
-variable "route_table_name" {
-    type = map(string)
-    default = {}  
-}
-
-variable "route_table_routes" {
-    type = list(map(string))
-    default = []
 }
 
 variable "public_inbound" {

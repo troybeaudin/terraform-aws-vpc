@@ -1,6 +1,7 @@
 resource "aws_nat_gateway" "default" {
-    subnet_id = aws_subnet.main_public_subnets[keys(aws_subnet.main_public_subnets)[0]].id
-    allocation_id = aws_eip.natgw.id
+    for_each = {for subnet in var.public_subnets : subnet.name => subnet}
+    subnet_id = aws_subnet.main_public_subnets[each.key].id
+    allocation_id = aws_eip.natgw[each.key].id
 
     tags = {
         Name = "${lower(var.vpc_name)}_natgw"
@@ -12,6 +13,7 @@ resource "aws_nat_gateway" "default" {
 }
 
 resource "aws_eip" "natgw" {
+    for_each = {for subnet in var.public_subnets : subnet.name => subnet}
     vpc = true
 }
 
